@@ -16,7 +16,8 @@ app.get("/", (req, res) => {
   });
 });
 app.post("/payment/create", async (req, res) => {
-  const total = parseInt(req.query.total);
+  try {
+    const total = parseInt(req.query.total);
   if (total > 0) {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: total,
@@ -26,11 +27,17 @@ app.post("/payment/create", async (req, res) => {
     res.status(201).json({ clientSecret: paymentIntent.client_secret })
   } else {
     res.status(403).json({ message: "The total should be more than zero" });
-  }
+     }
+    } catch (error) {
+      res.status(500).json({ message: "server error please try again" })
+    }
 });
-app.listen(4000,(err)=>{
+    
+
+  
+app.listen(5000,(err)=>{
     if(err) throw err;
-    console.log("Amazon Server is running on port 4000,http://localhost:4000");
+    console.log("Amazon Server is running on port 4000,http://localhost:5000");
 })
 
 
